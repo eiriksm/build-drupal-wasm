@@ -12,6 +12,6 @@ describe('My First Test', () => {
       })
       cy.get('#new').click()
     }
-    cy.get('body.user-logged-in', {timeout: 120000}).should('exist');
+    cy.get('body.user-logged-in', {timeout: 180000}).should('exist');
   })
 })

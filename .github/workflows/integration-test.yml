@@ -67,5 +67,5 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          start: npx serve & sleep 5 && curl localhost:3000
+          start: python3 -m http.server 3000 & sleep 5 && curl localhost:3000
           working-directory: build-drupal-wasm
