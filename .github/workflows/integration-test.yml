@@ -1,0 +1,60 @@
+name: Integration test
+on:
+  - push
+  - pull_request
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: 'ubuntu-24.04'
+    strategy:
+      fail-fast: false
+      matrix:
+        drupal-version:
+          - "^10"
+          - "^11"
+    steps:
+
+      - name: Check sqlite3 version
+        run: sqlite3 --version
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: build-drupal-wasm
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+
+      - name: Update composer
+        run: composer --verbose self-update --2
+
+      - name: Dump composer version
+        run: composer --version
+
+      - name: Install Drupal
+        run: |
+          composer create-project "drupal/recommended-project:${{ matrix.drupal-version }}" drupal
+          cd drupal
+          # Require our package from the parent folder
+          composer config repositories."build-drupal-wasm" --json '{"type":"path","url":"../build-drupal-wasm","options":{"symlink":false}}'
+          # Allow our dev things, since a branch or PR will of course always be dev.
+          composer config minimum-stability dev
+          # We are about to require a plugin as well, so let's allow that
+          composer config --no-plugins allow-plugins true
+          composer require eiriksm/build-drupal-wasm
+          # We also need drush for the site install.
+          composer require drush/drush
+          # Now let's install the minimal profile. Since we use sqlite here, that module will be with us.
+          vendor/bin/drush site:install minimal --db-url=sqlite://sites/default/files/.ht.sqlite -y
+          # Now we can export the config
+          vendor/bin/drush config:export -y
+          # The permissions are probably too strict on settings.php and the like. Let's fix that.
+          chmod -R 777 web/sites/default
+          # And we need to merge the composer.json with the one inside the assets in our .github folder.
+          php -r '$assetComposerJson=json_decode(file_get_contents("../build-drupal-wasm/.github/assets/composer.json"),TRUE);$composerJson=json_decode(file_get_contents("./composer.json"),TRUE);$scripts=$assetComposerJson["scripts"];$composerJson["scripts"]=$scripts+array_diff_key($composerJson["scripts"]??[],$scripts);file_put_contents("./composer.json",json_encode($composerJson,JSON_PRETTY_PRINT|JSON_FORCE_OBJECT|JSON_UNESCAPED_SLASHES));'
+          ls -lah vendor/eiriksm/build-drupal-wasm
+          ls -lah vendor/eiriksm
+          composer build-drupal-wasm

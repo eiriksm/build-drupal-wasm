@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "site-install": [
+      "drush site:install --existing-config -y"
+    ]
+  }
+}
