@@ -40,8 +40,8 @@ jobs:
           # We are about to require a plugin as well, so let's allow that
           composer config --no-plugins allow-plugins true
           composer require "eiriksm/build-drupal-wasm"
-          ls vendor/eiriksm/build-drupal-wasm
           rm -rf vendor/eiriksm/build-drupal-wasm/drupal
+          composer update
           # We also need drush for the site install.
           composer require drush/drush
           # Now let's install the minimal profile. Since we use sqlite here, that module will be with us.
