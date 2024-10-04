@@ -188,7 +188,7 @@ class Builder extends BaseCommand
             $staging_dir_is_ready,
             $translatable_factory
         );
-        $this->cleaner = new Cleaner($file_system, $cleaner_preconditions, $cleaner_preconditions);
+        $this->cleaner = new Cleaner($file_system, $cleaner_preconditions);
     }
 
   /**
@@ -204,11 +204,11 @@ class Builder extends BaseCommand
    */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // First we need to append our own settings.php stuff to the settings.php
-        // file. Technically, this could also be the default of course, but just
-        // because we simply only support sqlite that's what we'll do.
-        $contents = file_get_contents(__DIR__ . '/../assets/settings.append.php');
         $finder = new DrupalFinderComposerRuntime();
+        $active_directory = $this->pathFactory->create($finder->getComposerRoot());
+        // Create a staging directory.
+        $staging_path = sys_get_temp_dir() . '/composer-stager/' . hash('sha256', $finder->getComposerRoot());
+        $staging_directory = $this->pathFactory->create($staging_path);
         $drupal_root = $finder->getDrupalRoot();
         $file_path = sprintf('%s/sites/default/settings.php', $drupal_root);
         $existing_file = file_exists($file_path);
@@ -221,16 +221,16 @@ class Builder extends BaseCommand
         $pre_contents = file_get_contents($file_path);
         $return = 1;
         try {
-            $active_directory = $this->pathFactory->create($finder->getComposerRoot());
-          // Create a staging directory.
-            $staging_path = sys_get_temp_dir() . '/composer-stager/' . hash('sha256', $finder->getComposerRoot());
-            $staging_directory = $this->pathFactory->create($staging_path);
-          // Get the diff of the composer root and the drupal root, since this
-          // will be the "web" folder. The diff here refers to the difference of
-          // the strings.
+            // Get the diff of the composer root and the drupal root, since this
+            // will be the "web" folder. The diff here refers to the difference of
+            // the strings.
             $diff = str_replace($finder->getComposerRoot(), '', $finder->getDrupalRoot());
             $this->beginner->begin($active_directory, $staging_directory);
             $drupal_root_in_stage = sprintf('%s%s', $staging_path, $diff);
+            // First we need to append our own settings.php stuff to the settings.php
+            // file. Technically, this could also be the default of course, but just
+            // because we simply only support sqlite that's what we'll do.
+            $contents = file_get_contents(__DIR__ . '/../assets/settings.append.php');
             $path_in_stage = sprintf('%s/sites/default/settings.php', $drupal_root_in_stage);
             file_put_contents($path_in_stage, $contents, FILE_APPEND);
             $output->writeln('<info>The required settings were added to the existing settings.php</info>');
