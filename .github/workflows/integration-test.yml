@@ -1,0 +1,39 @@
+name: Integration test
+on:
+  - push
+  - pull_request
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: 'ubuntu-latest'
+    strategy:
+      fail-fast: false
+      matrix:
+        drupal-version:
+          - "^10"
+          - "^11"
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+
+      - name: Update composer
+        run: composer --verbose self-update --2
+
+      - name: Dump composer version
+        run: composer --version
+
+      - name: Install Drupal
+        run: |
+          composer create-project drupal/recommended-project:{{ matrix.drupal-version }} drupal
+          cd drupal
+          # Require our package from the parent folder
+          composer config repositories."build-drupal-wasm" path ".."
+          # We need to explicitly require the stager as well, since our stability flag is stable.
+          composer require eiriksm/build-drupal-wasm:dev-main php-tuf/composer-stager:^2-beta
