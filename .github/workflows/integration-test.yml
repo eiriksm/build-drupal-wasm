@@ -31,7 +31,7 @@ jobs:
 
       - name: Install Drupal
         run: |
-          composer create-project drupal/recommended-project:{{ matrix.drupal-version }} drupal
+          composer create-project "drupal/recommended-project:${{ matrix.drupal-version }}" drupal
           cd drupal
           # Require our package from the parent folder
           composer config repositories."build-drupal-wasm" path ".."
