@@ -34,12 +34,14 @@ jobs:
           composer create-project "drupal/recommended-project:${{ matrix.drupal-version }}" drupal
           cd drupal
           # Require our package from the parent folder
-          composer config repositories."build-drupal-wasm" path ".."
+          composer config repositories."build-drupal-wasm" --json '{"type":"path","url":"..","symlink":false}'
           # Allow our dev things, since a branch or PR will of course always be dev.
           composer config minimum-stability dev
           # We are about to require a plugin as well, so let's allow that
           composer config --no-plugins allow-plugins true
           composer require "eiriksm/build-drupal-wasm"
+          ls vendor/eiriksm/build-drupal-wasm
+          rm -rf vendor/eiriksm/build-drupal-wasm/drupal
           # We also need drush for the site install.
           composer require drush/drush
           # Now let's install the minimal profile. Since we use sqlite here, that module will be with us.
