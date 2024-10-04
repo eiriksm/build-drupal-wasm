@@ -46,7 +46,9 @@ jobs:
           composer config --no-plugins allow-plugins true
           composer require eiriksm/build-drupal-wasm
           php web/core/scripts/drupal install core/recipes/standard --site-name RecipeBuiltSite
+          # drush used for exporting config
           composer require drush/drush
+          # Show some info about the site installed
           vendor/bin/drush st
           # Now we can export the config
           vendor/bin/drush config:export -y
@@ -54,6 +56,4 @@ jobs:
           chmod -R 777 web/sites/default
           # And we need to merge the composer.json with the one inside the assets in our .github folder.
           php -r '$assetComposerJson=json_decode(file_get_contents("../build-drupal-wasm/.github/assets/composer.json"),TRUE);$composerJson=json_decode(file_get_contents("./composer.json"),TRUE);$scripts=$assetComposerJson["scripts"];$composerJson["scripts"]=$scripts+array_diff_key($composerJson["scripts"]??[],$scripts);file_put_contents("./composer.json",json_encode($composerJson,JSON_PRETTY_PRINT|JSON_FORCE_OBJECT|JSON_UNESCAPED_SLASHES));'
-          ls -lah vendor/eiriksm/build-drupal-wasm
-          ls -lah vendor/eiriksm
           composer build-drupal-wasm
