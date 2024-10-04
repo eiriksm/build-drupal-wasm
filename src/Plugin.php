@@ -13,31 +13,31 @@ class Plugin implements PluginInterface, Capable
   /**
    * {@inheritDoc}
    */
-  public function activate(Composer $composer, IOInterface $io)
-  {
-  }
+    public function activate(Composer $composer, IOInterface $io)
+    {
+    }
 
   /**
    * {@inheritDoc}
    */
-  public function deactivate(Composer $composer, IOInterface $io)
-  {
-  }
+    public function deactivate(Composer $composer, IOInterface $io)
+    {
+    }
 
   /**
    * {@inheritDoc}
    */
-  public function uninstall(Composer $composer, IOInterface $io)
-  {
-  }
+    public function uninstall(Composer $composer, IOInterface $io)
+    {
+    }
 
   /**
    * {@inheritDoc}
    */
-  public function getCapabilities()
-  {
-    return array(
-      'Composer\Plugin\Capability\CommandProvider' => 'eiriksm\BuildDrupalWasm\CommandProvider',
-    );
-  }
+    public function getCapabilities()
+    {
+        return [
+        'Composer\Plugin\Capability\CommandProvider' => 'eiriksm\BuildDrupalWasm\CommandProvider',
+        ];
+    }
 }

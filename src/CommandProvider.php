@@ -10,8 +10,8 @@ class CommandProvider implements CommandProviderCapability
   /**
    * {@inheritDoc}
    */
-  public function getCommands()
-  {
-    return array(new Builder());
-  }
+    public function getCommands()
+    {
+        return [new Builder()];
+    }
 }
