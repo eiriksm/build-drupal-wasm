@@ -35,5 +35,8 @@ jobs:
           cd drupal
           # Require our package from the parent folder
           composer config repositories."build-drupal-wasm" path ".."
-          # We need to explicitly require the stager as well, since our stability flag is stable.
-          composer require "eiriksm/build-drupal-wasm:*" php-tuf/composer-stager:^2-beta
+          # Allow our dev things, since a branch or PR will of course always be dev.
+          composer config minimum-stability dev
+          # We are about to require a plugin as well, so let's allow that
+          composer config --no-plugins allow-plugins true
+          composer require "eiriksm/build-drupal-wasm"
