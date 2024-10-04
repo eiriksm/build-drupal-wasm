@@ -36,4 +36,4 @@ jobs:
           # Require our package from the parent folder
           composer config repositories."build-drupal-wasm" path ".."
           # We need to explicitly require the stager as well, since our stability flag is stable.
-          composer require eiriksm/build-drupal-wasm:dev-main php-tuf/composer-stager:^2-beta
+          composer require "eiriksm/build-drupal-wasm:*" php-tuf/composer-stager:^2-beta
