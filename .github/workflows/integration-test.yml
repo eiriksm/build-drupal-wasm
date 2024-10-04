@@ -57,6 +57,11 @@ jobs:
           # And we need to merge the composer.json with the one inside the assets in our .github folder.
           php -r '$assetComposerJson=json_decode(file_get_contents("../build-drupal-wasm/.github/assets/composer.json"),TRUE);$composerJson=json_decode(file_get_contents("./composer.json"),TRUE);$scripts=$assetComposerJson["scripts"];$composerJson["scripts"]=$scripts+array_diff_key($composerJson["scripts"]??[],$scripts);file_put_contents("./composer.json",json_encode($composerJson,JSON_PRETTY_PRINT|JSON_FORCE_OBJECT|JSON_UNESCAPED_SLASHES));'
           composer build-drupal-wasm
+          mv public ../build-drupal-wasm/
+
+      - run: |
+          ls 
+          ls build-drupal-wasm
 
       - name: Install npm
         working-directory: build-drupal-wasm
