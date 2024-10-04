@@ -45,7 +45,7 @@ jobs:
           # We are about to require a plugin as well, so let's allow that
           composer config --no-plugins allow-plugins true
           composer require eiriksm/build-drupal-wasm
-          # We also need drush for the site install.
+          php web/core/scripts/drupal install core/recipes/standard --site-name RecipeBuiltSite
           composer require drush/drush
           # Now let's install the minimal profile. Since we use sqlite here, that module will be with us.
           vendor/bin/drush site:install minimal --db-url=sqlite://sites/default/files/.ht.sqlite -y
