@@ -40,3 +40,13 @@ jobs:
           # We are about to require a plugin as well, so let's allow that
           composer config --no-plugins allow-plugins true
           composer require "eiriksm/build-drupal-wasm"
+          # We also need drush for the site install.
+          composer require drush/drush
+          # Now let's install the minimal profile. Since we use sqlite here, that module will be with us.
+          vendor/bin/drush site:install minimal --db-url=sqlite://sites/default/files/.ht.sqlite -y
+          # Now we can export the config
+          vendor/bin/drush config:export -y
+          # And we need to merge the composer.json with the one inside the assets in our .github folder.
+          cp ../.github/assets/composer.json to_be_merged.json
+          jq -s '.[0] * .[1]' composer.json to_be_merged.json > composer.json
+          cat composer.json
