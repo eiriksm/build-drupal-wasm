@@ -17,6 +17,8 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          path: plugin
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -34,14 +36,12 @@ jobs:
           composer create-project "drupal/recommended-project:${{ matrix.drupal-version }}" drupal
           cd drupal
           # Require our package from the parent folder
-          composer config repositories."build-drupal-wasm" --json '{"type":"path","url":"..","symlink":false}'
+          composer config repositories."build-drupal-wasm" --json '{"type":"path","url":"../plugin","symlink":false}'
           # Allow our dev things, since a branch or PR will of course always be dev.
           composer config minimum-stability dev
           # We are about to require a plugin as well, so let's allow that
           composer config --no-plugins allow-plugins true
-          composer require "eiriksm/build-drupal-wasm"
-          rm -rf vendor/eiriksm/build-drupal-wasm/drupal
-          composer update
+          composer require eiriksm/build-drupal-wasm
           # We also need drush for the site install.
           composer require drush/drush
           # Now let's install the minimal profile. Since we use sqlite here, that module will be with us.
@@ -49,5 +49,5 @@ jobs:
           # Now we can export the config
           vendor/bin/drush config:export -y
           # And we need to merge the composer.json with the one inside the assets in our .github folder.
-          php -r '$assetComposerJson=json_decode(file_get_contents("../.github/assets/composer.json"),TRUE);$composerJson=json_decode(file_get_contents("./composer.json"),TRUE);$scripts=$assetComposerJson["scripts"];$composerJson["scripts"]=$scripts+array_diff_key($composerJson["scripts"]??[],$scripts);file_put_contents("./composer.json",json_encode($composerJson,JSON_PRETTY_PRINT|JSON_FORCE_OBJECT|JSON_UNESCAPED_SLASHES));'
+          php -r '$assetComposerJson=json_decode(file_get_contents("../plugin/.github/assets/composer.json"),TRUE);$composerJson=json_decode(file_get_contents("./composer.json"),TRUE);$scripts=$assetComposerJson["scripts"];$composerJson["scripts"]=$scripts+array_diff_key($composerJson["scripts"]??[],$scripts);file_put_contents("./composer.json",json_encode($composerJson,JSON_PRETTY_PRINT|JSON_FORCE_OBJECT|JSON_UNESCAPED_SLASHES));'
           composer build-drupal-wasm
