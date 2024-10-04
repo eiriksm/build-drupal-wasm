@@ -202,7 +202,7 @@ class Builder extends BaseCommand
   /**
    * {@inheritDoc}
    */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $finder = new DrupalFinderComposerRuntime();
         $active_directory = $this->pathFactory->create($finder->getComposerRoot());
