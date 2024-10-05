@@ -8,18 +8,13 @@ const cookies = new CookieMap([
   ['big_pipe_nojs', '1']
 ]);
 
-const onRequest = async(request, response) => {
+const onRequest = (request, response) => {
     const url = new URL(request.url);
     const logLine =
         `[${new Date().toISOString()}]` +
         ` 127.0.0.1 - "${request.method}` +
         ` ${url.pathname}" - HTTP/1.1 ${response.status}`;
     console.log(logLine);
-    var body = await response.getText()
-    if (body.includes('</html>')) {
-      body = body.replace('</html>', `<script>window.dispatchEvent(new Event('load'));</script></html>`)
-    }
-    response.body = body
     self.dispatchEvent(new Event('load'));
 };
 const notFound = (request) => {
