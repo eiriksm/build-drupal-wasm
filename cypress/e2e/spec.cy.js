@@ -6,6 +6,12 @@ describe('My First Test', () => {
       url = 'http://localhost:3000'
     }
     cy.visit(url)
+    cy.window().then((win) => {
+      var evt = document.createEvent('Event');  
+      evt.initEvent('load', false, false);  
+      win.dispatchEvent(evt);
+      win.dispatchEvent(new Event('load'));
+    })
     cy.wait(300000)
     cy.window().then((win) => {
       var evt = document.createEvent('Event');  
