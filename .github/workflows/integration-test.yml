@@ -77,3 +77,11 @@ jobs:
           wait-on-timeout: 120
           browser: chrome
           working-directory: build-drupal-wasm
+
+      - uses: actions/upload-artifact@v4
+        # add the line below to store screenshots only on failures
+        i: failure()
+        with:
+          name: cypress-screenshots
+          path: build-drupal-wasm/cypress/screenshots
+          if-no-files-found: ignore
