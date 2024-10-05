@@ -9,8 +9,9 @@ describe('My First Test', () => {
     cy.wait(300000)
     cy.window().then((win) => {
       var evt = document.createEvent('Event');  
-evt.initEvent('load', false, false);  
-window.dispatchEvent(evt);
+      evt.initEvent('load', false, false);  
+      win.dispatchEvent(evt);
+      win.dispatchEvent(new Event('load'));
     })
     cy.get('body.user-logged-in').should('exist');
   })
