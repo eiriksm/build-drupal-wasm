@@ -7,4 +7,4 @@ setTimeout(() => {
     `${window.location.origin}/service-worker.mjs`,
     `${window.location.origin}/service-worker.js`
   )
-}, 100)
+}, 500)
