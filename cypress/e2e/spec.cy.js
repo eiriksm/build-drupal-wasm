@@ -7,9 +7,11 @@ describe('My First Test', () => {
     }
     cy.visit(url)
     cy.wait(300000)
-    var evt = document.createEvent('Event');  
+    cy.window().then((win) => {
+      var evt = document.createEvent('Event');  
 evt.initEvent('load', false, false);  
 window.dispatchEvent(evt);
+    })
     cy.get('body.user-logged-in').should('exist');
   })
 })
