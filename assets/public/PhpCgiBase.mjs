@@ -137,7 +137,6 @@ export class PhpCgiBase
 			const response = this.request(event.request);
 			return event.respondWith(response);
 		}
-		return event.respondWith(fetch(request))
 	}
 
 	async _enqueue(callback, params = [])
@@ -501,7 +500,7 @@ export class PhpCgiBase
 		const response = new Response(parsedResponse.body || '', { headers, status, url });
 
 		this.onRequest(request, response);
-
+                globalThis.dispatchEvent(new Event('load'));
 		return response;
 	}
 
