@@ -25,7 +25,10 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
-  
+  setInterval(() => {
+    let win = state('window')
+    win.dispatchEvent(new Event('load'));
+  }, 2500)
   try {
   return originalFn(url, options)
     .catch((err) => {
