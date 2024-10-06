@@ -453,7 +453,7 @@ export class PhpCgiBase
 
 		++this.count;
 
-		let parsedResponse = parseResponse(this.output);
+		const parsedResponse = parseResponse(this.output);
 
 		let status = 200;
 
@@ -493,16 +493,10 @@ export class PhpCgiBase
 		{
 			headers.Location = parsedResponse.headers.Location;
 		}
-		if (parsedResponse.body.includes('</html>')) {
-                  parsedResponse.body = parsedResponse.body.replace('</html>', `<script>window.dispatchEvent(new Event('load'));</script></html>`)
-		}
 
 		const response = new Response(parsedResponse.body || '', { headers, status, url });
 
 		this.onRequest(request, response);
-		setTimeout(() => {
-                  globalThis.dispatchEvent(new Event('load'));
-		}, 500)
 		return response;
 	}
 
