@@ -59,11 +59,7 @@ jobs:
           composer build-drupal-wasm
           mv public ../build-drupal-wasm/
 
-      - run: |
-          ls 
-          ls build-drupal-wasm
-
-      - name: Install npm
+      - name: Install npm dependencies 
         working-directory: build-drupal-wasm
         run: |
           # Install our dependencies
