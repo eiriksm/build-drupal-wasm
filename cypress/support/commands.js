@@ -23,19 +23,3 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-
-Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
-  setInterval(() => {
-    cy.window().then((win) => {
-      win.dispatchEvent(new Event('load'));
-    })
-  }, 2500)
-  try {
-  return originalFn(url, options)
-    .catch((err) => {
-      return null
-    })
-  } catch (err) {
-    return null;
-  }
-})
