@@ -497,6 +497,7 @@ export class PhpCgiBase
 		const response = new Response(parsedResponse.body || '', { headers, status, url });
 
 		this.onRequest(request, response);
+
 		return response;
 	}
 
