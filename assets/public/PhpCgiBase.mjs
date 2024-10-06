@@ -137,6 +137,7 @@ export class PhpCgiBase
 			const response = this.request(event.request);
 			return event.respondWith(response);
 		}
+		return event.respondWith(fetch(request))
 	}
 
 	async _enqueue(callback, params = [])
