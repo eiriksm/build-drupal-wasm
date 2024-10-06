@@ -1,6 +1,6 @@
 import { registerWorker } from './utils.mjs'
 import { defineTrialManagerElement } from "./trial-manager.mjs";
-
+alert('hello')
 setTimeout(() => {
   defineTrialManagerElement()
   setTimeout(() => {
