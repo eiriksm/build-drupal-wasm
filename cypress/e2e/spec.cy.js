@@ -10,7 +10,7 @@ describe('Start the site', () => {
     cy.wait(175000)
     .then(() => {
       window.dispatchEvent(new Event('load'));
-    }
+    })
     cy.get('body.user-logged-in').should('exist');
   })
 })
