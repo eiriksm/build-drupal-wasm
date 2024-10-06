@@ -9,7 +9,6 @@ describe('Start the site', () => {
     cy.wait(175000)
     cy.wait(175000)
     const win = cy.reload()
-    win.dispatchEvent(new Event('load'));
     cy.get('body.user-logged-in').should('exist');
   })
 })
