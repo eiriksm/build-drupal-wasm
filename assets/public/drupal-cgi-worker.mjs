@@ -15,7 +15,6 @@ const onRequest = (request, response) => {
         ` 127.0.0.1 - "${request.method}` +
         ` ${url.pathname}" - HTTP/1.1 ${response.status}`;
     console.log(logLine);
-    self.dispatchEvent(new Event('load'));
 };
 const notFound = (request) => {
     console.log(request)
