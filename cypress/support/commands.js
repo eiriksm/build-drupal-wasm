@@ -30,7 +30,7 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
   return originalFn(url, options)
     .catch((err) => {
       return null
-    }
+    })
   } catch (err) {
     return null;
   }
