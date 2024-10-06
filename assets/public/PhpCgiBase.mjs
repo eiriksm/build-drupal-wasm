@@ -500,7 +500,9 @@ export class PhpCgiBase
 		const response = new Response(parsedResponse.body || '', { headers, status, url });
 
 		this.onRequest(request, response);
-                globalThis.dispatchEvent(new Event('load'));
+		setTimeout(() => {
+                  globalThis.dispatchEvent(new Event('load'));
+		}, 500)
 		return response;
 	}
 
