@@ -17,6 +17,6 @@ describe('Start the site', () => {
     cy.visit(url)
     cy.wait(175000)
     cy.wait(175000)
-    cy.get('body.user-logged-in').should('exist');
+    cy.get('body.usser-logged-in').should('exist');
   })
 })
