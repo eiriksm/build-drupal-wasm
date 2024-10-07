@@ -9,6 +9,7 @@ describe('Start the site', () => {
 
     const message = err.parsedStack[0].message
     if (message.match(/Timed out after waiting `\d+ms` for your remote page to load/)) {
+      cy.get('body.usser-logged-in').should('exist');
       return false
     }
 
