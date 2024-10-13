@@ -57,7 +57,32 @@ jobs:
           # And we need to merge the composer.json with the one inside the assets in our .github folder.
           php -r '$assetComposerJson=json_decode(file_get_contents("../build-drupal-wasm/.github/assets/composer.json"),TRUE);$composerJson=json_decode(file_get_contents("./composer.json"),TRUE);$scripts=$assetComposerJson["scripts"];$composerJson["scripts"]=$scripts+array_diff_key($composerJson["scripts"]??[],$scripts);file_put_contents("./composer.json",json_encode($composerJson,JSON_PRETTY_PRINT|JSON_FORCE_OBJECT|JSON_UNESCAPED_SLASHES));'
           composer build-drupal-wasm
-          npx serve public&
-          # We need to wait for the server to start up.
-          sleep 5
-          curl localhost:3000
+          mv public ../build-drupal-wasm/
+
+      - name: Install npm dependencies 
+        working-directory: build-drupal-wasm
+        run: |
+          # Install our dependencies
+          npm install
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          start: npm run dev
+          wait-on: "http://localhost:3000"
+          wait-on-timeout: 120
+          browser: chrome
+          working-directory: build-drupal-wasm
+          record: true
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
+
+      - uses: actions/upload-artifact@v4
+        # add the line below to store screenshots only on failures
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: build-drupal-wasm/cypress/screenshots
+          if-no-files-found: ignore
