@@ -29,7 +29,7 @@ describe('Start the site', () => {
       }
     }
     recursivelyClickNewOrNot(0)
-    cy.wait(180000)
+    cy.wait(240000)
     cy.get('body.user-logged-in').should('exist');
   })
 })
