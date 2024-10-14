@@ -63,14 +63,14 @@ jobs:
           curl localhost:3000
 
       - name: Install dependencies
-        run: cd drupal/public && npm ci
+        run: cd build-drupal-wasm && npm ci
       - name: Install Playwright Browsers
-        run: cd drupal/public && npx playwright install --with-deps
+        run: cd build-drupal-wasm && npx playwright install --with-deps
       - name: Run Playwright tests
         run: |
           npx serve drupal/public&
           sleep 5
-          cd drupal/public
+          cd build-drupal-wasm
           npx playwright test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
