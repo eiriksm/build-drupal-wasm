@@ -61,3 +61,21 @@ jobs:
           # We need to wait for the server to start up.
           sleep 5
           curl localhost:3000
+
+      - name: Install dependencies
+        run: cd build-drupal-wasm && npm ci
+      - name: Install Playwright Browsers
+        run: cd build-drupal-wasm && npx playwright install --with-deps
+      - name: Run Playwright tests
+        run: |
+          npx serve drupal/public&
+          sleep 5
+          cd build-drupal-wasm
+          npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
