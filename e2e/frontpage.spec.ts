@@ -35,6 +35,6 @@ test('installs drupal and shows it', async ({ page }) => {
     }
   }
   await recursivelyClickNewOrNot(0)
-  const locator = page.locator('body.user-logsged-in')
+  const locator = page.locator('body.user-logged-in')
   await locator.waitFor({timeout: 240000})
 });
