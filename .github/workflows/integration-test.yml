@@ -76,6 +76,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: playwright-output
+          name: playwright-output-${{ matrix.drupal-version }}
           path: build-drupal-wasm/playwright/output
           retention-days: 30
