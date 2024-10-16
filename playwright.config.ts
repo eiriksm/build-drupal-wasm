@@ -25,11 +25,9 @@ export default defineConfig({
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://127.0.0.1:3000',
-
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    baseURL: 'http://127.0.0.1:3000',
     trace: 'on-first-retry',
+    screenshot: 'only-on-failure'
   },
 
   /* Configure projects for major browsers */
@@ -38,5 +36,6 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-  ]
+  ],
+  outputDir: './playwright/output'
 });
