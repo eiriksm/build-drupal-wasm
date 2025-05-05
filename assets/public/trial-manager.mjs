@@ -116,6 +116,7 @@ export default class TrialManager extends HTMLElement {
             })
 
             this.setAttribute('message', 'Redirecting to your site')
+            window.location = `/cgi/${this.flavor}`
         }
         else if (action === 'reload') {
             this.channel.postMessage({
