@@ -171,9 +171,14 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.48.0",
-    "@types/node": "^22.7.5"
+    "@types/node": "^22.7.5",
+    "cypress": "14.0"
   },
-  "scripts": {},
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "dev": "cd public && python3 -m http.server 3000"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eiriksm/build-drupal-wasm.git"

@@ -57,25 +57,26 @@ jobs:
           # And we need to merge the composer.json with the one inside the assets in our .github folder.
           php -r '$assetComposerJson=json_decode(file_get_contents("../build-drupal-wasm/.github/assets/composer.json"),TRUE);$composerJson=json_decode(file_get_contents("./composer.json"),TRUE);$scripts=$assetComposerJson["scripts"];$composerJson["scripts"]=$scripts+array_diff_key($composerJson["scripts"]??[],$scripts);file_put_contents("./composer.json",json_encode($composerJson,JSON_PRETTY_PRINT|JSON_FORCE_OBJECT|JSON_UNESCAPED_SLASHES));'
           composer build-drupal-wasm
-          # We need this to make sure we wait until the server is up.
-          composer require eiriksm/wait-for-listen --dev
-          npx serve public&
-          ./vendor/bin/wait-for-listen 3000
-          curl localhost:3000
+          mv public ../build-drupal-wasm/
 
-      - name: Install dependencies
-        run: cd build-drupal-wasm && npm ci
-      - name: Install Playwright Browsers
-        run: cd build-drupal-wasm && npx playwright install --with-deps
-      - name: Run Playwright tests
+      - name: Install npm dependencies 
+        working-directory: build-drupal-wasm
         run: |
-          npx serve drupal/public&
-          sleep 5
-          cd build-drupal-wasm
-          npx playwright test
+          # Install our dependencies
+          npm install
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          start: npm run dev
+          wait-on: "http://localhost:3000"
+          wait-on-timeout: 120
+          browser: chrome
+          working-directory: build-drupal-wasm
       - uses: actions/upload-artifact@v4
+        # add the line below to store screenshots only on failures
         if: failure()
         with:
-          name: playwright-output-${{ matrix.drupal-version }}
-          path: build-drupal-wasm/playwright/output
-          retention-days: 30
+          name: cypress-screenshots-${{ matrix.drupal-version }}
+          path: build-drupal-wasm/cypress/screenshots
+          if-no-files-found: ignore
