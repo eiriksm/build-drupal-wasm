@@ -73,12 +73,6 @@ jobs:
           wait-on-timeout: 120
           browser: chrome
           working-directory: build-drupal-wasm
-          record: true
-        env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
-
       - uses: actions/upload-artifact@v4
         # add the line below to store screenshots only on failures
         if: failure()
