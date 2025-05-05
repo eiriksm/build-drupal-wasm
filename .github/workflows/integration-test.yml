@@ -77,6 +77,6 @@ jobs:
         # add the line below to store screenshots only on failures
         if: failure()
         with:
-          name: cypress-screenshots
+          name: cypress-screenshots-${{ matrix.drupal-version }}
           path: build-drupal-wasm/cypress/screenshots
           if-no-files-found: ignore
